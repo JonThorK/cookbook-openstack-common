@@ -124,8 +124,16 @@ default['openstack']['release'] = 'liberty'
 # have the cache automaticly updated
 default['openstack']['apt']['update_apt_cache'] = false
 default['openstack']['apt']['live_updates_enabled'] = true
-default['openstack']['apt']['uri'] = 'http://ubuntu-cloud.archive.canonical.com/ubuntu'
-default['openstack']['apt']['components'] = ["#{node['lsb']['codename']}-updates/#{node['openstack']['release']}", 'main']
+if node['platform'] == 'debian'
+  default['openstack']['apt']['keyring_package'] = 'gplhost-archive-keyring'
+  default['openstack']['apt']['uri'] = 'http://archive.gplhost.com/debian'
+  default['openstack']['apt']['components'] = ["#{node['openstack']['release']}", "#{node['openstack']['release']}-backports", 'main']
+else
+  default['openstack']['apt']['keyring_package'] = 'ubuntu-cloud-keyring'
+  default['openstack']['apt']['uri'] = 'http://ubuntu-cloud.archive.canonical.com/ubuntu'
+  default['openstack']['apt']['components'] = ["#{node['lsb']['codename']}-updates/#{node['openstack']['release']}", 'main']
+end
+
 # For the SRU packaging, use this:
 # default['openstack']['apt']['components'] = [ '%codename%-proposed/%release%', 'main' ]
 

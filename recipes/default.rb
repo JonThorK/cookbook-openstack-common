@@ -25,7 +25,7 @@ when 'debian'
     # Ensure we've done an apt-update first or packages won't be found.
     include_recipe 'apt'
   end
-  package 'ubuntu-cloud-keyring' do
+  package node['openstack']['apt']['keyring_package'] do
     options platform_options['package_overrides']
     action :upgrade
   end
